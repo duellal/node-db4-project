@@ -1,30 +1,16 @@
 const db = require(`../data/db-config`)
 
-/* select
-    r.recipe_id,
-    r.recipe_name,
-    created_at, 
-    rs.step_id,
-    rs.step_number,
-    rs.instruction,
-    rips.ingredient_id,
-    i.ingredient,
-    quantity
-from recipe_steps as rs
-left join recipes as r
-    on rs.recipe_id = r.recipe_id
-left join recipe_ingredients_per_step as rips
-    on rs.step_id = rips.step_id
-left join ingredients as i
-    on rips.ingredient_id = i.ingredient_id
-    
-    */
+async function find(){
+    const recipes = await db(`recipes`).select(`*`)
+
+    return recipes
+}
 
 async function getRecipeById(recipe_id){
     const recipes = await db(`recipe_steps as rs`)
         .leftJoin(`recipes as r`, `rs.recipe_id`, `r.recipe_id`)
         .leftJoin(`recipe_ingredients_per_step as rips`, `rs.step_id`, `rips.step_id`)
-        .leftJoin(`ingredients as i`, `rs.ingredient_id`, `i.ingredient_id`)
+        .leftJoin(`ingredients as i`, `rips.ingredient_id`, `i.ingredient_id`)
         .select(
             `r.recipe_id`,
             `r.recipe_name`,
@@ -35,11 +21,14 @@ async function getRecipeById(recipe_id){
             `rips.ingredient_id`,
             `i.ingredient`,
             `quantity`)
-        .where(`rs.recipe_id`, recipe_id)
+        .where(`r.recipe_id`, recipe_id)
         .orderBy(`rs.recipe_id`, `rs.step_number`)
 
 return recipes
 }
 
 
-module.exports = getRecipeById
+module.exports = {
+    getRecipeById,
+    find,
+ }
