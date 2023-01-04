@@ -3,7 +3,7 @@ const Recipes = require(`./model`)
 
 const router = express.Router()
 
-router.get(`/recipes`, (req, res) => {
+router.get(`/`, (req, res) => {
     Recipes.findAll()
         .then(recipe => {
             res.json(recipe)
@@ -11,7 +11,7 @@ router.get(`/recipes`, (req, res) => {
         .catch(err => console.log(err))
 })
 
-router.get(`/recipes/:id`, (req, res) => {
+router.get(`/:id`, (req, res) => {
     Recipes.getRecipeById(req.params.id)
         .then(recipe => {
             res.status(201).json(recipe)
