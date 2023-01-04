@@ -4,7 +4,7 @@ const Recipes = require(`./model`)
 const router = express.Router()
 
 router.get(`/recipes`, (req, res) => {
-    Recipes.find()
+    Recipes.findAll()
         .then(recipe => {
             res.json(recipe)
         })
